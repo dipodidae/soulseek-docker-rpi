@@ -5,8 +5,9 @@ services:
     # Note: Uses x86_64 image with QEMU emulation on ARM64/Raspberry Pi
     # build: .
     environment:
-      - PGID=1000
-      - PUID=1000
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ:-UTC}
     ports:
       - 6080:6080
     volumes:

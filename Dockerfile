@@ -48,6 +48,7 @@ ENV DISPLAY=:1 \
     NOVNC_PORT=6080 \
     PGID=1000 \
     PUID=1000 \
+    TZ=UTC \
     UMASK=022 \
     MODIFY_VOLUMES=true \
     XDG_RUNTIME_DIR=/tmp
