@@ -1,4 +1,4 @@
-# Soulseek Docker Container
+# Soulseek Docker Container for Raspberry Pi
 
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/realies/soulseek-docker?style=flat-square&logo=git&label=last%20commit)](https://github.com/realies/soulseek-docker/commits/main)
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/realies/soulseek-docker/build.yml?style=flat-square&logo=github&label=build)](https://github.com/realies/soulseek-docker/actions)
@@ -6,6 +6,15 @@
 [![Docker Image Size](https://img.shields.io/docker/image-size/realies/soulseek?style=flat-square&logo=docker&label=size)](https://hub.docker.com/r/realies/soulseek)
 
 ![Soulseek Docker Container Screenshot](https://i.snag.gy/8dpAbV.jpg)
+
+## Raspberry Pi Support
+
+This fork is specifically configured to run on Raspberry Pi (ARM64 architecture). It uses:
+- `linux/arm64` platform for Raspberry Pi 3B+, 4, and 5 (64-bit OS)
+- ARM-compatible s6-overlay binaries (aarch64)
+- All other dependencies compatible with ARM architecture
+
+For older Raspberry Pi models or 32-bit OS, you may need to change the platform to `linux/arm/v7` and use `armhf` s6-overlay binaries.
 
 ## Prerequisites
 
@@ -59,9 +68,9 @@ services:
     restart: unless-stopped
     volumes:
       - /persistent/appdata:/data/.SoulseekQt
-      - /persistent/downloads:/data/Soulseek Downloads
-      - /persistent/logs:/data/Soulseek Chat Logs
-      - /persistent/shared:/data/Soulseek Shared Folder
+      - /persistent/downloads:/data/downloads
+      - /persistent/logs:/data/logs
+      - /persistent/shared:/data/shared
     environment:
       - PGID=1000
       - PUID=1000
@@ -76,9 +85,9 @@ services:
 ```bash
 docker run -d --name soulseek --restart=unless-stopped \
   -v "/persistent/appdata":"/data/.SoulseekQt" \
-  -v "/persistent/downloads":"/data/Soulseek Downloads" \
-  -v "/persistent/logs":"/data/Soulseek Chat Logs" \
-  -v "/persistent/shared":"/data/Soulseek Shared Folder" \
+  -v "/persistent/downloads":"/data/downloads" \
+  -v "/persistent/logs":"/data/logs" \
+  -v "/persistent/shared":"/data/shared" \
   -e PGID=1000 \
   -e PUID=1000 \
   -p 6080:6080 \

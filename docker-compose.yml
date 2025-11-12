@@ -1,8 +1,9 @@
 version: '2'
 services:
   soulseek:
-    platform: linux/amd64
-    build: .
+    image: dipodidae/soulseek-rpi:latest
+    # platform: linux/arm64  # Uncomment if you want to build locally
+    # build: .
     environment:
       - PGID=1000
       - PUID=1000
@@ -10,9 +11,9 @@ services:
       - 6080:6080
     volumes:
       - appdata:/data/.SoulseekQt
-      - downloads:/data/Soulseek Downloads
-      - shared:/data/Soulseek Shared Folder
-      - logs:/data/Soulseek Chat Logs
+      - downloads:/data/downloads
+      - shared:/data/shared
+      - logs:/data/logs
 volumes:
   appdata:
   downloads:

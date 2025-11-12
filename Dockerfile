@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 ubuntu:latest
+FROM --platform=linux/arm64 ubuntu:latest
 
 COPY ui.patch /tmp
 
@@ -10,9 +10,9 @@ RUN apt-get update && \
     curl -fL# https://github.com/just-containers/s6-overlay/releases/latest/download/s6-overlay-noarch.tar.xz -o /tmp/s6-overlay-noarch.tar.xz && \
     tar -C / -Jxpf /tmp/s6-overlay-noarch.tar.xz && \
     rm -rf /tmp/s6-overlay-noarch.tar.xz && \
-    curl -fL# https://github.com/just-containers/s6-overlay/releases/latest/download/s6-overlay-x86_64.tar.xz -o /tmp/s6-overlay-x86_64.tar.xz && \
-    tar -C / -Jxpf /tmp/s6-overlay-x86_64.tar.xz && \
-    rm -rf /tmp/s6-overlay-x86_64.tar.xz && \
+    curl -fL# https://github.com/just-containers/s6-overlay/releases/latest/download/s6-overlay-aarch64.tar.xz -o /tmp/s6-overlay-aarch64.tar.xz && \
+    tar -C / -Jxpf /tmp/s6-overlay-aarch64.tar.xz && \
+    rm -rf /tmp/s6-overlay-aarch64.tar.xz && \
     mkdir /usr/share/novnc && \
     curl -fL# https://github.com/novnc/noVNC/archive/master.tar.gz -o /tmp/novnc.tar.gz && \
     tar -xf /tmp/novnc.tar.gz --strip-components=1 -C /usr/share/novnc && \
@@ -26,9 +26,9 @@ RUN apt-get update && \
     patch /usr/share/novnc/vnc.html < /tmp/ui.patch && \
     sed -i 's/10px 0 5px/8px 0 6px/' /usr/share/novnc/app/styles/base.css && \
     ln -s /app/default.png /usr/share/novnc/app/images/soulseek.png && \
-    ln -s /data/Soulseek\ Downloads /usr/share/novnc/downloads && \
-    ln -s /data/Soulseek\ Shared\ Folder /usr/share/novnc/shared && \
-    ln -s /data/Soulseek\ Chat\ Logs /usr/share/novnc/logs && \
+    ln -s /data/downloads /usr/share/novnc/downloads && \
+    ln -s /data/shared /usr/share/novnc/shared && \
+    ln -s /data/logs /usr/share/novnc/logs && \
     curl -fL# 'https://f004.backblazeb2.com/file/SoulseekQt/SoulseekQt-2024-6-30.AppImage' -o /tmp/SoulseekQt-2024-6-30.AppImage && \
     chmod +x /tmp/SoulseekQt-2024-6-30.AppImage && \
     /tmp/SoulseekQt-2024-6-30.AppImage --appimage-extract && \
