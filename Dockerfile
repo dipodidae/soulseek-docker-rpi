@@ -3,57 +3,41 @@
 
 FROM --platform=linux/amd64 ubuntu:latest
 
-COPY ui.patch /tmp
+# Copy build scripts and patches
+COPY scripts/ /build-scripts/
+COPY ui.patch /tmp/
 
+# Install system dependencies
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive \
-    apt-get install -y binutils ca-certificates curl dbus fonts-noto-cjk locales libegl1 openbox patch python3-numpy tigervnc-standalone-server tigervnc-tools tzdata xz-utils --no-install-recommends && \
+    apt-get install -y \
+        binutils \
+        ca-certificates \
+        curl \
+        dbus \
+        fonts-noto-cjk \
+        locales \
+        libegl1 \
+        openbox \
+        patch \
+        python3-numpy \
+        tigervnc-standalone-server \
+        tigervnc-tools \
+        tzdata \
+        xz-utils \
+        --no-install-recommends && \
+    # Generate machine ID and locale
     dbus-uuidgen > /etc/machine-id && \
-    locale-gen en_US.UTF-8 && \
-    curl -fL# https://github.com/just-containers/s6-overlay/releases/latest/download/s6-overlay-noarch.tar.xz -o /tmp/s6-overlay-noarch.tar.xz && \
-    tar -C / -Jxpf /tmp/s6-overlay-noarch.tar.xz && \
-    rm -rf /tmp/s6-overlay-noarch.tar.xz && \
-    curl -fL# https://github.com/just-containers/s6-overlay/releases/latest/download/s6-overlay-x86_64.tar.xz -o /tmp/s6-overlay-x86_64.tar.xz && \
-    tar -C / -Jxpf /tmp/s6-overlay-x86_64.tar.xz && \
-    rm -rf /tmp/s6-overlay-x86_64.tar.xz && \
-    dbus-uuidgen > /etc/machine-id && \
-    locale-gen en_US.UTF-8 && \
-    curl -fL# https://github.com/just-containers/s6-overlay/releases/latest/download/s6-overlay-noarch.tar.xz -o /tmp/s6-overlay-noarch.tar.xz && \
-    tar -C / -Jxpf /tmp/s6-overlay-noarch.tar.xz && \
-    rm -rf /tmp/s6-overlay-noarch.tar.xz && \
-    curl -fL# https://github.com/just-containers/s6-overlay/releases/latest/download/s6-overlay-aarch64.tar.xz -o /tmp/s6-overlay-aarch64.tar.xz && \
-    tar -C / -Jxpf /tmp/s6-overlay-aarch64.tar.xz && \
-    rm -rf /tmp/s6-overlay-aarch64.tar.xz && \
-    mkdir /usr/share/novnc && \
-    curl -fL# https://github.com/novnc/noVNC/archive/master.tar.gz -o /tmp/novnc.tar.gz && \
-    tar -xf /tmp/novnc.tar.gz --strip-components=1 -C /usr/share/novnc && \
-    mkdir /usr/share/novnc/utils/websockify && \
-    curl -fL# https://github.com/novnc/websockify/archive/master.tar.gz -o /tmp/websockify.tar.gz && \
-    tar -xf /tmp/websockify.tar.gz --strip-components=1 -C /usr/share/novnc/utils/websockify && \
-    curl -fL# https://site-assets.fontawesome.com/releases/v6.0.0/svgs/solid/cloud-arrow-down.svg -o /usr/share/novnc/app/images/downloads.svg && \
-    curl -fL# https://site-assets.fontawesome.com/releases/v6.0.0/svgs/solid/folder-music.svg -o /usr/share/novnc/app/images/shared.svg && \
-    curl -fL# https://site-assets.fontawesome.com/releases/v6.0.0/svgs/solid/comments.svg -o /usr/share/novnc/app/images/logs.svg && \
-    bash -c 'sed -i "s/<path/<path style=\"fill:white\"/" /usr/share/novnc/app/images/{downloads,logs,shared}.svg' && \
-    patch /usr/share/novnc/vnc.html < /tmp/ui.patch && \
-    sed -i 's/10px 0 5px/8px 0 6px/' /usr/share/novnc/app/styles/base.css && \
-    ln -s /app/default.png /usr/share/novnc/app/images/soulseek.png && \
-    ln -s /data/downloads /usr/share/novnc/downloads && \
-    ln -s /data/shared /usr/share/novnc/shared && \
-    ln -s /data/logs /usr/share/novnc/logs && \
-    curl -fL# 'https://f004.backblazeb2.com/file/SoulseekQt/SoulseekQt-2024-6-30.AppImage' -o /tmp/SoulseekQt-2024-6-30.AppImage && \
-    chmod +x /tmp/SoulseekQt-2024-6-30.AppImage && \
-    /tmp/SoulseekQt-2024-6-30.AppImage --appimage-extract && \
-    mv /squashfs-root /app && \
-    strip /app/SoulseekQt && \
-    userdel -f $(id -nu 1000) || true && \
-    groupdel -f $(id -ng 1000) || true && \
-    rm -rf /home && \
-    useradd -u 1000 -U -d /data -s /bin/false soulseek && \
-    usermod -G users soulseek && \
-    mkdir /data && \
-    apt-get purge -y binutils curl dbus patch xz-utils && \
-    apt-get autoremove -y && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    locale-gen en_US.UTF-8
+
+# Run installation scripts
+RUN chmod +x /build-scripts/*.sh && \
+    /build-scripts/install-s6-overlay.sh && \
+    /build-scripts/install-novnc.sh && \
+    /build-scripts/install-soulseek.sh && \
+    /build-scripts/setup-user.sh && \
+    /build-scripts/cleanup.sh && \
+    rm -rf /build-scripts
 
 ENV DISPLAY=:1 \
     HOME=/tmp \
