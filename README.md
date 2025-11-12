@@ -1,9 +1,9 @@
 # Soulseek Docker Container for Raspberry Pi
 
-[![GitHub Last Commit](https://img.shields.io/github/last-commit/realies/soulseek-docker?style=flat-square&logo=git&label=last%20commit)](https://github.com/realies/soulseek-docker/commits/main)
-[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/realies/soulseek-docker/build.yml?style=flat-square&logo=github&label=build)](https://github.com/realies/soulseek-docker/actions)
-[![Docker Pulls](https://img.shields.io/docker/pulls/realies/soulseek?style=flat-square&logo=docker&label=pulls)](https://hub.docker.com/r/realies/soulseek)
-[![Docker Image Size](https://img.shields.io/docker/image-size/realies/soulseek?style=flat-square&logo=docker&label=size)](https://hub.docker.com/r/realies/soulseek)
+[![GitHub Last Commit](https://img.shields.io/github/last-commit/dipodidae/soulseek-docker-rpi?style=flat-square&logo=git&label=last%20commit)](https://github.com/dipodidae/soulseek-docker-rpi/commits/master)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/dipodidae/soulseek-docker-rpi/build.yml?style=flat-square&logo=github&label=build)](https://github.com/dipodidae/soulseek-docker-rpi/actions)
+[![Docker Pulls](https://img.shields.io/docker/pulls/dipodidae/soulseek-rpi?style=flat-square&logo=docker&label=pulls)](https://hub.docker.com/r/dipodidae/soulseek-rpi)
+[![Docker Image Size](https://img.shields.io/docker/image-size/dipodidae/soulseek-rpi?style=flat-square&logo=docker&label=size)](https://hub.docker.com/r/dipodidae/soulseek-rpi)
 
 ![Soulseek Docker Container Screenshot](https://i.snag.gy/8dpAbV.jpg)
 
@@ -70,7 +70,7 @@ The container supports the following configuration options:
 version: "3"
 services:
   soulseek:
-    image: realies/soulseek
+    image: dipodidae/soulseek-rpi:latest
     container_name: soulseek
     restart: unless-stopped
     volumes:
@@ -100,7 +100,7 @@ docker run -d --name soulseek --restart=unless-stopped \
   -p 6080:6080 \
   -p 61122:61122 \ # example listening port, check Options -> Login
   -p 61123:61123 \ # example obfuscated port, check Options -> Login
-  realies/soulseek
+  dipodidae/soulseek-rpi:latest
 ```
 
 ### Using Docker on Synology DSM
