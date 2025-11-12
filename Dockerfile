@@ -1,10 +1,21 @@
-FROM --platform=linux/arm64 ubuntu:latest
+# Multi-platform Soulseek Docker image for Raspberry Pi
+# Uses x86_64 Soulseek binary with QEMU emulation on ARM64
+
+FROM --platform=linux/amd64 ubuntu:latest
 
 COPY ui.patch /tmp
 
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive \
     apt-get install -y binutils ca-certificates curl dbus fonts-noto-cjk locales libegl1 openbox patch python3-numpy tigervnc-standalone-server tigervnc-tools tzdata xz-utils --no-install-recommends && \
+    dbus-uuidgen > /etc/machine-id && \
+    locale-gen en_US.UTF-8 && \
+    curl -fL# https://github.com/just-containers/s6-overlay/releases/latest/download/s6-overlay-noarch.tar.xz -o /tmp/s6-overlay-noarch.tar.xz && \
+    tar -C / -Jxpf /tmp/s6-overlay-noarch.tar.xz && \
+    rm -rf /tmp/s6-overlay-noarch.tar.xz && \
+    curl -fL# https://github.com/just-containers/s6-overlay/releases/latest/download/s6-overlay-x86_64.tar.xz -o /tmp/s6-overlay-x86_64.tar.xz && \
+    tar -C / -Jxpf /tmp/s6-overlay-x86_64.tar.xz && \
+    rm -rf /tmp/s6-overlay-x86_64.tar.xz && \
     dbus-uuidgen > /etc/machine-id && \
     locale-gen en_US.UTF-8 && \
     curl -fL# https://github.com/just-containers/s6-overlay/releases/latest/download/s6-overlay-noarch.tar.xz -o /tmp/s6-overlay-noarch.tar.xz && \

@@ -20,7 +20,7 @@ jobs:
         uses: lucacome/docker-image-update-checker@v2.0.0
         with:
           base-image: "ubuntu:latest"
-          image: "realies/soulseek:latest"
+          image: "dipodidae/soulseek-rpi:latest"
 
       - name: Set up Docker Buildx
         if: github.event_name == 'push' || steps.image_update_check.outputs.needs-updating == 'true'
@@ -40,7 +40,7 @@ jobs:
           context: .
           file: Dockerfile
           push: true
-          tags: realies/soulseek:latest
+          tags: dipodidae/soulseek-rpi:latest
           builder: ${{ steps.buildx.outputs.name }}
           platforms: linux/amd64
 

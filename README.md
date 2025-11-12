@@ -9,12 +9,19 @@
 
 ## Raspberry Pi Support
 
-This fork is specifically configured to run on Raspberry Pi (ARM64 architecture). It uses:
-- `linux/arm64` platform for Raspberry Pi 3B+, 4, and 5 (64-bit OS)
-- ARM-compatible s6-overlay binaries (aarch64)
-- All other dependencies compatible with ARM architecture
+This fork is configured to run on Raspberry Pi using QEMU emulation:
 
-For older Raspberry Pi models or 32-bit OS, you may need to change the platform to `linux/arm/v7` and use `armhf` s6-overlay binaries.
+**Important:** SoulseekQt only provides x86_64 binaries. This image uses the x86_64 version which will be automatically emulated on ARM64 systems (Raspberry Pi 3B+, 4, 5) through Docker's QEMU integration.
+
+### Prerequisites for Raspberry Pi:
+1. Enable QEMU emulation support (usually pre-installed on modern Docker):
+   ```bash
+   docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+   ```
+2. Raspberry Pi 3B+, 4, or 5 with 64-bit OS recommended
+3. At least 2GB RAM (performance may vary due to emulation)
+
+**Performance Note:** Since Soulseek runs under emulation, performance will be slower than native ARM64 applications. This is a limitation of SoulseekQt not providing ARM binaries.
 
 ## Prerequisites
 

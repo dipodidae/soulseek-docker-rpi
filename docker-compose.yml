@@ -2,7 +2,7 @@ version: '2'
 services:
   soulseek:
     image: dipodidae/soulseek-rpi:latest
-    # platform: linux/arm64  # Uncomment if you want to build locally
+    # Note: Uses x86_64 image with QEMU emulation on ARM64/Raspberry Pi
     # build: .
     environment:
       - PGID=1000
