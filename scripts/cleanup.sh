@@ -1,15 +1,31 @@
 #!/bin/bash
-set -e
+#
+# Perform final image cleanup.
+# Removes build dependencies, unused packages, and temporary files.
 
-echo "Performing final cleanup..."
+set -euo pipefail
 
-# Remove build dependencies
-apt-get purge -y binutils curl dbus patch xz-utils
+readonly BUILD_DEPS=(
+  binutils
+  curl
+  dbus
+  patch
+  xz-utils
+)
 
-# Remove unused packages
-apt-get autoremove -y
+main() {
+  echo "Performing final cleanup..."
 
-# Clean package cache and temp files
-rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+  # Remove build dependencies
+  apt-get purge -y "${BUILD_DEPS[@]}"
 
-echo "Cleanup complete"
+  # Remove unused packages
+  apt-get autoremove -y
+
+  # Clean package cache and temp files
+  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+  echo "Cleanup complete"
+}
+
+main "$@"

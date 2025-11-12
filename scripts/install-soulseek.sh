@@ -1,23 +1,31 @@
 #!/bin/bash
-set -e
+#
+# Download and extract SoulseekQt application.
+# Supports SOULSEEK_VERSION environment variable for version selection.
 
-SOULSEEK_VERSION="${SOULSEEK_VERSION:-2024-6-30}"
-SOULSEEK_URL="https://f004.backblazeb2.com/file/SoulseekQt/SoulseekQt-${SOULSEEK_VERSION}.AppImage"
+set -euo pipefail
 
-echo "Downloading and extracting SoulseekQt ${SOULSEEK_VERSION}..."
+readonly SOULSEEK_VERSION="${SOULSEEK_VERSION:-2024-6-30}"
+readonly SOULSEEK_URL="https://f004.backblazeb2.com/file/SoulseekQt/SoulseekQt-${SOULSEEK_VERSION}.AppImage"
 
-# Download SoulseekQt AppImage
-curl -fL# "${SOULSEEK_URL}" -o /tmp/SoulseekQt.AppImage
-chmod +x /tmp/SoulseekQt.AppImage
+main() {
+  echo "Downloading and extracting SoulseekQt ${SOULSEEK_VERSION}..."
 
-# Extract AppImage
-/tmp/SoulseekQt.AppImage --appimage-extract
+  # Download SoulseekQt AppImage
+  curl -fL# "${SOULSEEK_URL}" -o /tmp/SoulseekQt.AppImage
+  chmod +x /tmp/SoulseekQt.AppImage
 
-# Move to /app and cleanup
-mv /squashfs-root /app
-rm -f /tmp/SoulseekQt.AppImage
+  # Extract AppImage
+  /tmp/SoulseekQt.AppImage --appimage-extract
 
-# Strip binary to reduce size
-strip /app/SoulseekQt 2>/dev/null || true
+  # Move to /app and cleanup
+  mv /squashfs-root /app
+  rm -f /tmp/SoulseekQt.AppImage
 
-echo "SoulseekQt installation complete"
+  # Strip binary to reduce size
+  strip /app/SoulseekQt 2>/dev/null || true
+
+  echo "SoulseekQt installation complete"
+}
+
+main "$@"
