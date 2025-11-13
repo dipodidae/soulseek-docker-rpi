@@ -1,9 +1,7 @@
 # Soulseek Docker Container for Raspberry Pi
 
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/dipodidae/soulseek-docker-rpi?style=flat-square&logo=git&label=last%20commit)](https://github.com/dipodidae/soulseek-docker-rpi/commits/master)
-[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/dipodidae/soulseek-docker-rpi/build.yml?style=flat-square&logo=github&label=build)](https://github.com/dipodidae/soulseek-docker-rpi/actions)
-[![Docker Pulls](https://img.shields.io/docker/pulls/dipodidae/soulseek-rpi?style=flat-square&logo=docker&label=pulls)](https://hub.docker.com/r/dipodidae/soulseek-rpi)
-[![Docker Image Size](https://img.shields.io/docker/image-size/dipodidae/soulseek-rpi?style=flat-square&logo=docker&label=size)](https://hub.docker.com/r/dipodidae/soulseek-rpi)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/dipodidae/soulseek-docker-rpi/build.yml?branch=master&style=flat-square&logo=github&label=build)](https://github.com/dipodidae/soulseek-docker-rpi/actions)
 
 ![Soulseek Docker Container Screenshot](https://i.snag.gy/8dpAbV.jpg)
 
@@ -67,7 +65,7 @@ The container supports the following configuration options:
 ### Using Docker Compose
 
 ```yaml
-version: "3"
+version: "3.8"
 services:
   soulseek:
     image: dipodidae/soulseek-rpi:latest

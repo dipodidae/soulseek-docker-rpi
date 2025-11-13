@@ -1,4 +1,6 @@
 #!/command/with-contenv bash
 
+set -euo pipefail
+
 # Start noVNC proxy
-exec s6-setuidgid $(id -nu $PUID) /usr/share/novnc/utils/novnc_proxy --vnc localhost:${VNC_PORT} --listen ${NOVNC_PORT} --web /usr/share/novnc
+exec s6-setuidgid "$(id -nu "${PUID}")" /usr/share/novnc/utils/novnc_proxy --vnc "localhost:${VNC_PORT}" --listen "${NOVNC_PORT}" --web /usr/share/novnc

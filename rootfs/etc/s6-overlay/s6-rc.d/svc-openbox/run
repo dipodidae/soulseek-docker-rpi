@@ -1,4 +1,6 @@
 #!/command/with-contenv bash
 
+set -euo pipefail
+
 # Start Openbox
-exec s6-setuidgid $(id -nu $PUID) openbox
+exec s6-setuidgid "$(id -nu "${PUID}")" openbox

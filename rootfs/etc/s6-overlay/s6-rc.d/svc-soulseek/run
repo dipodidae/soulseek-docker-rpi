@@ -1,8 +1,11 @@
 #!/command/with-contenv bash
 
+set -euo pipefail
+
 export HOME=/data
+
 # Default umask settings
-umask ${UMASK}
+umask "${UMASK}"
 
 # Start Soulseek
-exec s6-setuidgid $(id -nu $PUID) /app/SoulseekQt
+exec s6-setuidgid "$(id -nu "${PUID}")" /app/SoulseekQt

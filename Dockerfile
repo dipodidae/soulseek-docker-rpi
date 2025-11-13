@@ -3,6 +3,16 @@
 
 FROM --platform=linux/amd64 ubuntu:latest
 
+# OCI labels for metadata
+LABEL org.opencontainers.image.title="Soulseek Docker for Raspberry Pi" \
+      org.opencontainers.image.description="SoulseekQt with noVNC web interface, optimized for Raspberry Pi with QEMU emulation" \
+      org.opencontainers.image.authors="dipodidae" \
+      org.opencontainers.image.url="https://github.com/dipodidae/soulseek-docker-rpi" \
+      org.opencontainers.image.source="https://github.com/dipodidae/soulseek-docker-rpi" \
+      org.opencontainers.image.documentation="https://github.com/dipodidae/soulseek-docker-rpi/blob/master/README.md" \
+      org.opencontainers.image.licenses="MIT" \
+      org.opencontainers.image.vendor="dipodidae"
+
 # Copy build scripts and patches
 COPY scripts/ /build-scripts/
 COPY ui.patch /tmp/
@@ -21,6 +31,8 @@ RUN apt-get update && \
         openbox \
         patch \
         python3-numpy \
+        qemu-user-static \
+        squashfs-tools \
         tigervnc-standalone-server \
         tigervnc-tools \
         tzdata \
@@ -54,5 +66,8 @@ ENV DISPLAY=:1 \
     XDG_RUNTIME_DIR=/tmp
 
 COPY rootfs /
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
+  CMD curl -f http://localhost:${NOVNC_PORT}/ || exit 1
 
 ENTRYPOINT ["/init"]

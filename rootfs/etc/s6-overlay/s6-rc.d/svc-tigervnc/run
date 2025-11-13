@@ -1,16 +1,18 @@
 #!/command/with-contenv bash
 
+set -euo pipefail
+
 # Check if the VNCPWD_FILE variable is set and file exists
-if [ -n "$VNCPWD_FILE" ] && [ -f "$VNCPWD_FILE" ]; then
-  VNCPWD=$(cat $VNCPWD_FILE)
+if [[ -n "${VNCPWD_FILE:-}" ]] && [[ -f "${VNCPWD_FILE}" ]]; then
+  VNCPWD="$(cat "${VNCPWD_FILE}")"
 fi
 
 # Define default VNC password handling
-if [ -z "${VNCPWD}" ]; then
+if [[ -z "${VNCPWD:-}" ]]; then
   noauth="-SecurityTypes None"
 else
   echo "${VNCPWD}" | vncpasswd -f > /tmp/passwd
 fi
 
 # Start Tigervnc with configurable port
-exec s6-setuidgid $(id -nu $PUID) Xtigervnc -desktop soulseek -auth /tmp/.Xauthority -rfbport ${VNC_PORT} -nopn -rfbauth /tmp/passwd -quiet -AlwaysShared $noauth :1
+exec s6-setuidgid "$(id -nu "${PUID}")" Xtigervnc -desktop soulseek -auth /tmp/.Xauthority -rfbport "${VNC_PORT}" -nopn -rfbauth /tmp/passwd -quiet -AlwaysShared ${noauth:-} :1

@@ -1,1 +1,17 @@
+# OS files
 .DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# IDE files
+.vscode/
+.idea/
+*.iml
+
+# Docker
+.env
+
+# Logs
+*.log
